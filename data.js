@@ -1,5 +1,5 @@
 /**
- * Datos de demostración — Prototipo clicable PDEC (Proyecto Hijo)
+ * Datos de demostración — Prototipo clicable PDEC (Plataforma PDEC)
  * Todo aquí es MOCK. No hay backend, no hay datos reales de ninguna JAC.
  * Estructura de fases/componentes tomada 1:1 de FORMATOS PDEC/ (25 componentes, 6 fases).
  */

@@ -1,8 +1,8 @@
-# PDEC · Prototipo clicable — Proyecto Hijo
+# PDEC · Prototipo clicable — Plataforma PDEC
 
 Prototipo de pantallas **sin conexión a datos reales** (mock en el navegador, persistido solo en `localStorage` para que la demo se sienta viva entre clics). Construido para que el jefe apruebe el planteamiento antes de pasarlo a diseño final y a desarrollo.
 
-**Objetivo de este prototipo:** mostrar visualmente cómo quedaría el acceso simplificado ("Proyecto Hijo") descrito en la propuesta — sin login propio, entrando desde un botón dentro de la plataforma actual de IDACCC — y cómo se ve la misma plataforma desde los dos roles: **JAC** (quien carga evidencia) e **IDACCC** (quien valida).
+**Objetivo de este prototipo:** mostrar visualmente cómo quedaría el acceso simplificado (Plataforma PDEC) descrito en la propuesta — sin login propio, entrando desde un botón dentro de la plataforma actual de IDACCC — y cómo se ve la misma plataforma desde los dos roles: **JAC** (quien carga evidencia) e **IDACCC** (quien valida).
 
 No busca ser el punto de partida técnico para el desarrollador ni el archivo de trabajo de la diseñadora — es HTML/CSS/JS plano justamente para que sea fácil de inspeccionar y para que, **una vez el jefe lo apruebe**, la diseñadora tenga una referencia clara de qué pantallas, flujos y textos ajustar en el diseño definitivo.
 

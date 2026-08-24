@@ -1,5 +1,5 @@
 /**
- * Prototipo clicable — Proyecto Hijo PDEC-IDACCC
+ * Prototipo clicable — Plataforma PDEC (PDEC-IDACCC)
  * Sin backend: todo el estado vive en memoria + localStorage (solo para que la
  * demo se sienta "viva" entre clics). No hay llamadas de red ni datos reales.
  */
@@ -205,7 +205,7 @@ function renderEntry() {
       <div class="entry__body">
         <div class="entry__gov">${ICON.building} Plataforma <b>IDACCC · GOV.CO</b></div>
         <div class="entry__title">Sistema Integrado — Módulo PDEC</div>
-        <p class="entry__subtitle">Este prototipo simula el punto de entrada: un botón dentro del panel que la JAC y el equipo de IDACCC ya usan hoy. Un clic abre el Proyecto Hijo con la sesión y el rol correctos — sin login propio.</p>
+        <p class="entry__subtitle">Este prototipo simula el punto de entrada: un botón dentro del panel que la JAC y el equipo de IDACCC ya usan hoy. Un clic abre la Plataforma PDEC con la sesión y el rol correctos — sin login propio.</p>
 
         <div class="entry__panels">
           <button class="entry-card" onclick="entrarComo('jac')">
