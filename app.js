@@ -73,6 +73,20 @@ function pctFase(f) {
 const momento1Fases = () => FASES.filter(f => f.momento === 1);
 const momento2Fases = () => FASES.filter(f => f.momento === 2);
 
+// Etiqueta + estilo del botón de cada componente, según estado y rol.
+// IDACCC solo tiene una acción "activa" (Revisar) cuando hay algo pendiente
+// de decidir (en_revision); si ya está validado, o si la JAC no ha cargado
+// nada todavía, no hay nada que revisar — el botón pasa a ser un "Ver" pasivo.
+function accionComponente(est, isIdaccc) {
+  if (isIdaccc) {
+    if (est === 'en_revision') return { label: 'Revisar', clase: 'btn-teal' };
+    return { label: 'Ver', clase: 'btn-outline' };
+  }
+  if (est === 'por_cargar') return { label: 'Cargar evidencia', clase: 'btn-primary' };
+  if (est === 'en_revision') return { label: 'Ver estado', clase: 'btn-outline' };
+  return { label: 'Ver', clase: 'btn-outline' };
+}
+
 // ---------------------------------------------------------------
 // Router
 // ---------------------------------------------------------------
@@ -343,13 +357,13 @@ function momentoCard(num, label, fasesArr, agg) {
       <div class="bar"><div class="bar__fill" style="width:${agg.pct}%"></div></div>
       <div class="momento-card__list">
         ${fasesArr.map(f => { const p = pctFase(f); return `
-          <div class="momento-card__fase-row">
+          <div class="momento-card__fase-row" onclick="event.stopPropagation(); nav('#/fase/${f.n}')">
             <b>F${f.n}</b> ${f.nombre}
             <div class="mini-bar"><div style="width:${p.pct}%"></div></div>
             <span>${p.validados}/${p.total}</span>
           </div>`; }).join('')}
       </div>
-      <div class="momento-card__cta">Abrir ${label} ${ICON.arrow}</div>
+      <div class="momento-card__cta">Ir a Fase ${fasesArr[0].n} ${ICON.arrow}</div>
     </div>`;
 }
 
@@ -461,7 +475,7 @@ function renderFase(n) {
             ${f.componentes.map(c => {
               const est = estadoDe(c.cod);
               const meta = ESTADO_META[est];
-              const accionLabel = isIdaccc ? 'Revisar' : (est === 'validado' ? 'Ver' : 'Cargar evidencia');
+              const accion = accionComponente(est, isIdaccc);
               return `
               <div class="comp-row">
                 <div class="comp-row__cod">${c.cod}</div>
@@ -470,7 +484,7 @@ function renderFase(n) {
                   <div class="comp-row__estado"><span class="estado ${meta.clase}">${meta.etiqueta}</span></div>
                 </div>
                 <div class="comp-row__actions">
-                  <button class="btn ${isIdaccc ? 'btn-teal' : 'btn-primary'} btn-sm" onclick="nav('#/fase/${f.n}/${c.cod}')">${accionLabel} ${ICON.arrow}</button>
+                  <button class="btn ${accion.clase} btn-sm" onclick="nav('#/fase/${f.n}/${c.cod}')">${accion.label} ${ICON.arrow}</button>
                 </div>
               </div>`;
             }).join('')}
@@ -568,12 +582,14 @@ function renderComponente(n, cod) {
                 }).join('')}
               </div>
 
-              ${!isIdaccc ? `
+              ${(!isIdaccc && est !== 'validado') ? `
               <div class="dropzone" style="margin-top:12px" onclick="cargarEvidenciaCompleta('${c.cod}')">
                 <div class="dropzone__icon">${ICON.upload}</div>
                 <div class="dropzone__title">Cargar evidencia de este componente</div>
                 <div class="dropzone__sub">Arrastra los archivos aquí o haz clic para simular la carga completa</div>
               </div>` : ''}
+              ${(!isIdaccc && est === 'validado') ? `
+              <div class="lock-note" style="background:var(--green-bg);color:#157A45;margin-top:12px">${ICON.check} Este componente ya fue validado por IDACCC — no se requieren más cargas.</div>` : ''}
             </div>
           </div>
 
@@ -588,7 +604,7 @@ function renderComponente(n, cod) {
                 ${state.notas[c.cod] ? `<br><br><b>Observación de IDACCC:</b> ${state.notas[c.cod]}` : ''}
               </div>
 
-              ${isIdaccc ? `
+              ${isIdaccc && est === 'en_revision' ? `
               <div class="review-panel">
                 <div class="review-panel__label">Panel de revisión · IDACCC</div>
                 <textarea id="obs-${c.cod}" placeholder="Observaciones para la JAC (opcional)">${state.notas[c.cod] || ''}</textarea>
@@ -596,6 +612,11 @@ function renderComponente(n, cod) {
                   <button class="btn btn-primary btn-sm" onclick="marcarValidado('${c.cod}')">${ICON.check} Marcar como validado</button>
                   <button class="btn btn-danger-outline btn-sm" onclick="solicitarAjustes('${c.cod}')">Solicitar ajustes</button>
                 </div>
+              </div>` : ''}
+              ${isIdaccc && est === 'validado' ? `
+              <div class="review-panel">
+                <div class="review-panel__label">Panel de revisión · IDACCC</div>
+                <p style="font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.5">Ya se tomó una decisión sobre este componente — no hay más acciones de revisión disponibles aquí.</p>
               </div>` : ''}
             </div>
           </div>
@@ -616,9 +637,10 @@ function nota_para_estado(est, isIdaccc) {
 function subirArchivo(cod, fmtCod) {
   state.uploads[cod] = state.uploads[cod] || {};
   state.uploads[cod][fmtCod] = true;
-  if (estadoDe(cod) === 'por_cargar') setEstado(cod, 'en_revision');
+  const cambiaEstado = estadoDe(cod) === 'por_cargar';
+  if (cambiaEstado) setEstado(cod, 'en_revision');
   guardarEstado();
-  toast('Archivo cargado. El componente pasa a "En revisión".');
+  toast(cambiaEstado ? 'Archivo cargado. El componente pasa a "En revisión".' : 'Archivo cargado.');
   render();
 }
 function cargarEvidenciaCompleta(cod) {
@@ -626,9 +648,10 @@ function cargarEvidenciaCompleta(cod) {
   const formatos = comp.formatos || [{ cod: `F${cod}` }];
   state.uploads[cod] = state.uploads[cod] || {};
   formatos.forEach(fmt => state.uploads[cod][fmt.cod] = true);
-  if (estadoDe(cod) === 'por_cargar') setEstado(cod, 'en_revision');
+  const cambiaEstado = estadoDe(cod) === 'por_cargar';
+  if (cambiaEstado) setEstado(cod, 'en_revision');
   guardarEstado();
-  toast('Evidencia cargada. IDACCC ya puede revisarla.');
+  toast(cambiaEstado ? 'Evidencia cargada. IDACCC ya puede revisarla.' : 'Evidencia actualizada.');
   render();
 }
 function marcarValidado(cod) {

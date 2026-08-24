@@ -250,7 +250,8 @@ h1,h2,h3,h4,p { margin: 0; }
 .bar { height: 8px; border-radius: 999px; background: var(--border-soft); overflow: hidden; margin-top: 14px; }
 .bar__fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--blue), var(--teal)); }
 .momento-card__list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
-.momento-card__fase-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-soft); }
+.momento-card__fase-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-soft); cursor: pointer; border-radius: 8px; padding: 3px 6px; margin: 0 -6px; transition: background .1s; }
+.momento-card__fase-row:hover { background: var(--blue-bg); color: var(--blue-dark); }
 .momento-card__fase-row b { color: var(--ink); font-weight: 600; }
 .momento-card__fase-row .mini-bar { flex: 1; height: 5px; border-radius: 999px; background: var(--border-soft); overflow: hidden; }
 .momento-card__fase-row .mini-bar > div { height: 100%; background: var(--blue); border-radius: 999px; }
