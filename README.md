@@ -8,7 +8,7 @@ No busca ser el punto de partida técnico para el desarrollador ni el archivo de
 
 ## Qué se puede recorrer
 
-- **Pantalla de entrada** — simula el botón embebido en `idaccc.gov.co`, con dos accesos: uno para la JAC y otro para el equipo interno de IDACCC (sin login propio, tal como se propuso).
+- **Pantalla de entrada** — junta en un solo lugar, solo para la demo, los dos botones que en la vida real viven separados dentro de SIIC: uno en el panel que ya usa la JAC, otro en el panel interno de IDACCC. Ninguno pregunta quién eres — SIIC ya lo sabe por dónde entraste, y el token firmado resuelve el rol sin login propio.
 - **Inicio / avance general** — la pantalla vitrina: anillo de avance general del proceso, y las dos tarjetas de **Momento 1** (Fases 1 y 2) y **Momento 2** (Fases 3 a 6), cada una con su propio avance.
 - **Portafolio IDACCC** — vista exclusiva del rol IDACCC: KPIs agregados y el listado de las JAC activas con su avance, tal como lo vería el equipo institucional dando seguimiento a varias juntas a la vez.
 - **Pantalla de fase** (plantilla única reutilizada por las 6 fases) — Presentación y Caja de herramientas como modales, y el listado de componentes con su estado.

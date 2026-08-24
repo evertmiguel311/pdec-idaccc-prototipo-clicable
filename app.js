@@ -191,7 +191,8 @@ function appbar(crumbs) {
 function salir() { state.role = null; state.viewingJacId = null; guardarEstado(); nav('#/entry'); }
 
 // ---------------------------------------------------------------
-// PANTALLA: Entrada (simula el botón embebido en idaccc.gov.co)
+// PANTALLA: Entrada (simula los botones embebidos en SIIC — aquí unidos en
+// una sola pantalla solo para poder demostrar ambos flujos en un prototipo)
 // ---------------------------------------------------------------
 function renderEntry() {
   app.innerHTML = `
@@ -201,28 +202,28 @@ function renderEntry() {
         <span class="entry__dot"></span><span class="entry__dot"></span><span class="entry__dot"></span>
         <span class="entry__url">idaccc.gov.co/Home/SistemaIntegrado</span>
       </div>
-      <div class="entry__label">— así se vería el botón dentro de la plataforma actual de IDACCC —</div>
+      <div class="entry__label">— esta pantalla no existe como tal: junta en un solo lugar dos botones que en la vida real viven separados dentro de SIIC —</div>
       <div class="entry__body">
-        <div class="entry__gov">${ICON.building} Plataforma <b>IDACCC · GOV.CO</b></div>
+        <div class="entry__gov">${ICON.building} Contexto simulado: dentro de <b>SIIC · GOV.CO</b></div>
         <div class="entry__title">Sistema Integrado — Módulo PDEC</div>
-        <p class="entry__subtitle">Este prototipo simula el punto de entrada: un botón dentro del panel que la JAC y el equipo de IDACCC ya usan hoy. Un clic abre la Plataforma PDEC con la sesión y el rol correctos — sin login propio.</p>
+        <p class="entry__subtitle">En SIIC no aparece una pantalla para "elegir" quién eres. Cada botón vive en su propio panel — uno dentro del panel que ya usa la JAC, otro dentro del panel interno de IDACCC — y SIIC ya sabe quién eres cuando lo ves ahí. Un clic te lleva directo a tu vista, con el rol ya resuelto por un token firmado — sin login propio.</p>
 
         <div class="entry__panels">
           <button class="entry-card" onclick="entrarComo('jac')">
             <div class="entry-card__icon">${ICON.users}</div>
             <div class="entry-card__title">Panel de la JAC</div>
-            <div class="entry-card__desc">Botón visible para las Juntas de Acción Comunal dentro de su panel actual. Simula el ingreso de <b>${JAC_ACTUAL.nombre}</b>.</div>
+            <div class="entry-card__desc">Así se vería el botón dentro del panel que hoy ya usa cada JAC en SIIC. Simula el ingreso de <b>${JAC_ACTUAL.nombre}</b> — entra directo a su propia vista, sin preguntar nada más.</div>
             <div class="entry-card__cta">Entrar al módulo PDEC ${ICON.arrow}</div>
           </button>
           <button class="entry-card entry-card--idaccc" onclick="entrarComo('idaccc')">
             <div class="entry-card__icon">${ICON.building}</div>
             <div class="entry-card__title">Panel interno IDACCC</div>
-            <div class="entry-card__desc">Botón visible para el equipo interno de IDACCC. Da acceso al seguimiento y validación de todas las JAC activas.</div>
+            <div class="entry-card__desc">Así se vería el botón dentro del panel interno del equipo de IDACCC en SIIC. Entra directo al seguimiento y validación de todas las JAC activas.</div>
             <div class="entry-card__cta">Entrar al módulo PDEC ${ICON.arrow}</div>
           </button>
         </div>
 
-        <div class="entry__foot">token de acceso firmado · sin contraseña propia · se abre con el rol ya asignado</div>
+        <div class="entry__foot">token de acceso firmado por SIIC · sin contraseña propia · el rol ya viene resuelto, nadie lo elige a mano</div>
       </div>
     </div>
   </div>`;
