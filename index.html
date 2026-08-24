@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PDEC · Prototipo clicable — Proyecto Hijo</title>
+<meta name="description" content="Prototipo clicable (sin conexión real) de la plataforma PDEC — Proyecto Hijo. Simula el ingreso desde JAC y desde IDACCC." />
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="demo-bar">
+  <span class="demo-bar__dot"></span>
+  <span><strong>Prototipo clicable</strong> — pantallas de demostración, sin conexión a datos reales</span>
+  <div class="demo-bar__actions">
+    <span id="demo-role-label"></span>
+    <button id="demo-switch-role" type="button" class="demo-bar__btn">Cambiar de vista</button>
+    <button id="demo-reset" type="button" class="demo-bar__btn demo-bar__btn--ghost">Reiniciar demo</button>
+  </div>
+</div>
+
+<div id="app" role="main"></div>
+
+<template id="tpl-toast"><div class="toast"></div></template>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
