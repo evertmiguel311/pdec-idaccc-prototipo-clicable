@@ -304,7 +304,8 @@ h1,h2,h3,h4,p { margin: 0; }
 .jac-row__bar .bar { margin-top: 0; }
 .jac-row__pct { width: 42px; text-align: right; font-weight: 700; font-size: 13px; flex: 0 0 auto; }
 .jac-row__chip { flex: 0 0 auto; }
-.jac-row__go { flex: 0 0 auto; color: var(--muted); }
+.jac-row__cta { flex: 0 0 auto; }
+.jac-row__nodemo { flex: 0 0 auto; font-size: 11px; font-family: var(--font-mono); color: var(--muted); white-space: nowrap; }
 @media (max-width: 760px) { .jac-row__bar { display: none; } }
 
 /* ---------------- Badges de estado (3 estados del diagnóstico) ---------------- */
@@ -320,8 +321,47 @@ h1,h2,h3,h4,p { margin: 0; }
 .estado--validado { background: var(--green-bg); color: #157A45; }
 .estado--validado::before { background: var(--green); }
 
-/* ---------------- Fase: acciones + lista de componentes ---------------- */
-.fase-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+/* ---------------- Botón volver (navegación siempre visible) ---------------- */
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px; border: none; background: transparent;
+  color: var(--ink-soft); font-size: 13.5px; font-weight: 700; cursor: pointer; padding: 6px 2px;
+  margin-bottom: 10px; border-radius: 8px;
+}
+.back-btn:hover { color: var(--blue); }
+.back-btn:hover svg { transform: translateX(-2px); }
+.back-btn svg { transition: transform .15s; }
+
+/* ---------------- Fase: herramientas centrales + lista de componentes ---------------- */
+.fase-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+@media (max-width: 620px) { .fase-tools { grid-template-columns: 1fr; } }
+.fase-tool {
+  position: relative; display: flex; align-items: center; gap: 14px; text-align: left; width: 100%;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 18px 20px; cursor: pointer; box-shadow: var(--shadow-card);
+  transition: border-color .15s, transform .15s;
+}
+.fase-tool:hover { border-color: var(--blue); transform: translateY(-2px); }
+.fase-tool--teal:hover { border-color: var(--teal); }
+.fase-tool__icon {
+  width: 44px; height: 44px; border-radius: 12px; flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--blue-bg); color: var(--blue-dark);
+}
+.fase-tool--teal .fase-tool__icon { background: var(--teal-bg); color: #0C7C89; }
+.fase-tool__title { font-size: 15px; font-weight: 800; color: var(--ink); }
+.fase-tool__desc { font-size: 12.5px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+.fase-tool[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute; left: 50%; bottom: calc(100% + 9px); transform: translateX(-50%);
+  background: var(--dark); color: #F5F6F8; font-size: 11.5px; font-weight: 600; line-height: 1.4;
+  padding: 8px 12px; border-radius: 8px; white-space: normal; max-width: 240px; text-align: center;
+  box-shadow: var(--shadow-pop); z-index: 20; pointer-events: none;
+}
+.fase-tool[data-tip]:hover::before {
+  content: ""; position: absolute; left: 50%; bottom: calc(100% + 4px); transform: translateX(-50%);
+  border: 5px solid transparent; border-top-color: var(--dark); z-index: 20; pointer-events: none;
+}
+
 .btn {
   display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 9px 16px;
   font-size: 13.5px; font-weight: 700; cursor: pointer; border: 1px solid transparent; transition: transform .1s, filter .1s;

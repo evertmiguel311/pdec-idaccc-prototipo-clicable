@@ -39,6 +39,7 @@ function resetDemo() { localStorage.removeItem(STORAGE_KEY); state = estadoInici
 // ---------------------------------------------------------------
 const ICON = {
   arrow: '<svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  arrowLeft: '<svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   check: '<svg class="icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="currentColor" stroke-width="1.8"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   clock: '<svg class="icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   upload: '<svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M12 16V5M12 5l-4 4M12 5l4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 15.5v2.2A2.3 2.3 0 006.8 20h10.4a2.3 2.3 0 002.3-2.3v-2.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>',
@@ -81,7 +82,12 @@ window.addEventListener('DOMContentLoaded', () => {
   render();
 });
 
-function nav(hash) { location.hash = hash; }
+function nav(hash) {
+  // Si el hash no cambia (ej. Villa Hermosa -> "Revisar" ya estando en #/home),
+  // el navegador no dispara "hashchange" — forzamos el re-render igual.
+  if (location.hash === hash) render();
+  else location.hash = hash;
+}
 
 function parseRoute() {
   const h = location.hash.replace(/^#\//, '');
@@ -286,9 +292,7 @@ function renderHomeAvanceGeneral() {
     <div class="page">
       <div class="container container--wide">
 
-        ${isIdacccViewing ? `<div style="margin-bottom:14px">
-          <button class="btn btn-outline btn-sm" onclick="volverAPortafolio()">${ICON.arrow.replace('M9 5l7 7-7 7','M15 5l-7 7 7 7')} Volver al portafolio IDACCC</button>
-        </div>` : ''}
+        ${isIdacccViewing ? `<button type="button" class="back-btn" onclick="volverAPortafolio()">${ICON.arrowLeft} Volver al portafolio IDACCC</button>` : ''}
 
         <div class="hero">
           <div class="hero__row">
@@ -395,7 +399,9 @@ function renderHomeIdacccPortafolio() {
                 <div class="jac-row__bar"><div class="bar"><div class="bar__fill" style="width:${pct}%"></div></div></div>
                 <div class="jac-row__pct">${pct}%</div>
                 <div class="jac-row__chip">${j.enRevision > 0 ? `<span class="estado estado--revision">${j.enRevision} en revisión</span>` : `<span class="estado estado--validado">Sin pendientes</span>`}</div>
-                <div class="jac-row__go">${drillable ? ICON.arrow : ''}</div>
+                ${drillable
+                  ? `<button type="button" class="btn btn-teal btn-sm jac-row__cta" onclick="event.stopPropagation(); verJacDesdeIdaccc('${j.id}')">Revisar ${ICON.arrow}</button>`
+                  : `<span class="jac-row__nodemo" title="Esta demo solo tiene el detalle cargado para JAC Villa Hermosa">Sin detalle en esta demo</span>`}
               </div>`;
             }).join('')}
           </div>
@@ -422,13 +428,26 @@ function renderFase(n) {
     ${appbar([{ label: 'Inicio', hash: '#/home' }, { label: `Fase ${f.n}` }])}
     <div class="page">
       <div class="container">
+        <button type="button" class="back-btn" onclick="nav('#/home')">${ICON.arrowLeft} Volver a Inicio</button>
         <div class="eyebrow">${momentoLabel} · Fase ${f.n} de 6</div>
         <h1 class="page-title">${f.nombre}</h1>
         <p class="page-desc">${f.resumen}</p>
 
-        <div class="fase-actions">
-          <button class="btn btn-outline" onclick="abrirPresentacion(${f.n})">${ICON.info} Presentación</button>
-          <button class="btn btn-outline" onclick="abrirCajaHerramientas(${f.n})">${ICON.toolbox} Caja de herramientas</button>
+        <div class="fase-tools">
+          <button type="button" class="fase-tool" onclick="abrirPresentacion(${f.n})" data-tip="Contexto y objetivo de esta fase, antes de empezar a cargar evidencia">
+            <div class="fase-tool__icon">${ICON.info}</div>
+            <div>
+              <div class="fase-tool__title">Presentación</div>
+              <div class="fase-tool__desc">Qué se busca en esta fase y por qué</div>
+            </div>
+          </button>
+          <button type="button" class="fase-tool fase-tool--teal" onclick="abrirCajaHerramientas(${f.n})" data-tip="Descarga las plantillas y guías oficiales de esta fase">
+            <div class="fase-tool__icon">${ICON.toolbox}</div>
+            <div>
+              <div class="fase-tool__title">Caja de herramientas</div>
+              <div class="fase-tool__desc">Formatos y matrices oficiales descargables</div>
+            </div>
+          </button>
         </div>
 
         <div class="section" style="margin-top:22px">
@@ -519,6 +538,7 @@ function renderComponente(n, cod) {
     ${appbar([{ label: 'Inicio', hash: '#/home' }, { label: `Fase ${f.n}`, hash: `#/fase/${f.n}` }, { label: `${c.cod} ${c.nombre}` }])}
     <div class="page">
       <div class="container">
+        <button type="button" class="back-btn" onclick="nav('#/fase/${f.n}')">${ICON.arrowLeft} Volver a Fase ${f.n}</button>
         <div class="eyebrow">Fase ${f.n} · Componente ${c.cod}</div>
         <h1 class="page-title">${c.nombre}</h1>
         <p class="page-desc">Repositorio de evidencia de este componente y su diagnóstico. ${isIdaccc ? 'La vista es la misma que ve la JAC — como IDACCC además puedes validar u observar.' : 'Aquí subes la evidencia de este componente para que IDACCC la revise.'}</p>
